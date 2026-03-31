@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMO Chantier">
+    <meta name="theme-color" content="#1E3A8A">
+    <title>AMO Chantier - Gestion de Chantier</title>
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231E3A8A' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'>AMO</text></svg>">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22AMO%20Chantier%22,%22short_name%22:%22AMO%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%231E3A8A%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231E3A8A' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'>AMO</text></svg>%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]}">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #F8FAFC;
+            color: #1E3A8A;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            color: white;
+            padding: 20px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* MAIN CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 70px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .section {
+            padding: 16px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1E3A8A;
+        }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #1E3A8A;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1E3A8A;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #64748B;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+
+        .badge-urgent {
+            background-color: #FF6B6B;
+            color: white;
+        }
+
+        .badge-en-cours {
+            background-color: #4ECDC4;
+            color: white;
+        }
+
+        .badge-en-attente {
+            background-color: #FFE66D;
+            color: #333;
+        }
+
+        .badge-realise {
+            background-color: #95E1D3;
+            color: #333;
+        }
+
+        .badge-present {
+            background-color: #51CF66;
+            color: white;
+        }
+
+        .badge-excuse {
+            background-color: #FFD93D;
+            color: #333;
+        }
+
+        .badge-absent {
+            background-color: #FF6B6B;
+            color: white;
+        }
+
+        .badge-represente {
+            background-color: #A8E6CF;
+            color: #333;
+        }
+
+        /* STATS */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E3A8A;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 4px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #E2E8F0;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748B;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: #1E3A8A;
+            border-bottom-color: #1E3A8A;
+        }
+
+        /* TAB CONTENT */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+            z-index: 200;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #CBD5E1;
+            transition: color 0.3s;
+            font-size: 12px;
+            border: none;
+            background: none;
+        }
+
+        .nav-item.active {
+            color: #1E3A8A;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* PARTICIPANT LIST */
+        .participant-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .participant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .participant-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E3A8A;
+        }
+
+        .participant-function {
+            font-size: 14px;
+            color: #64748B;
+            margin-bottom: 4px;
+        }
+
+        .participant-entity {
+            font-size: 12px;
+            color: #94A3B8;
+        }
+
+        /* ACTION CARD */
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .action-description {
+            font-size: 14px;
+            color: #1E3A8A;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .action-footer {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 8px;
+            border-top: 1px solid #E2E8F0;
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        /* LOTS TABLE */
+        .lot-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .lot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .lot-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1E3A8A;
+            background: #E0E7FF;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .lot-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E3A8A;
+            margin-bottom: 4px;
+        }
+
+        .lot-observation {
+            font-size: 13px;
+            color: #64748B;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .lot-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94A3B8;
+        }
+
+        /* REFRESH BUTTON */
+        .refresh-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #1E3A8A;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            z-index: 150;
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        .refresh-btn.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .stats-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* SAFE AREA */
+        @supports (padding: max(0px)) {
+            .header {
+                padding-top: max(20px, env(safe-area-inset-top));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>🏗️ Gestion de Chantier</h1>
+            <p>Fiche AMO - Visite du 20/03/2026</p>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('accueil')">📋 Accueil</button>
+            <button class="tab" onclick="switchTab('participants')">👥 Participants</button>
+            <button class="tab" onclick="switchTab('actions')">✅ Actions</button>
+            <button class="tab" onclick="switchTab('lots')">📊 Lots</button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- TAB: ACCUEIL -->
+            <div id="accueil" class="tab-content active">
+                <div class="section">
+                    <div class="section-title">📋 Opération</div>
+                    <div class="card">
+                        <div class="card-title">SIÈGE APHA – SCI MADELE / SAS MAYA</div>
+                        <div class="card-text">📍 705 avenue Justin CATAYÉ 97300 CAYENNE</div>
+                        <div class="card-text">💰 3 241 532,43 €</div>
+                        <div class="card-text">📅 20/03/2026 à 08h30</div>
+                        <span class="badge badge-en-cours">TERRASSEMENT</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📊 Aperçu</div>
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-number">04</div>
+                            <div class="stat-label">Fiche</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">10</div>
+                            <div class="stat-label">Actions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Lots</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🏢 Intervenants</div>
+                    <div class="card">
+                        <div class="card-text"><strong>Maître d'Ouvrage :</strong> SCI MADELE</div>
+                        <div class="card-text"><strong>MOE :</strong> BAT & VRD ABS</div>
+                        <div class="card-text"><strong>AMO :</strong> MEO</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">⚠️ Retards</div>
+                    <div class="card">
+                        <div class="card-text">🔴 <strong>Fondations</strong> : 6 semaines de retard</div>
+                        <div class="card-text">Achèvement contractuel : 30/01/2026</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: PARTICIPANTS -->
+            <div id="participants" class="tab-content">
+                <div class="section">
+                    <div class="section-title">👥 Participants à la visite</div>
+                    
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Romain LANNERETONNE</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">Maître d'ouvrage – MOU</div>
+                        <div class="participant-entity">SCI MADELE</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Karim WEIMERT</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">Manager d'opération</div>
+                        <div class="participant-entity">MEO</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Gaétan BERNARD</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">MOE BAT & VRD</div>
+                        <div class="participant-entity">BAT & VRD ABS</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Samou TRAORE</div>
+                            <span class="badge badge-excuse">E</span>
+                        </div>
+                        <div class="participant-function">IET BET GO</div>
+                        <div class="participant-entity">BET GO</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Socotec – MAHES</div>
+                            <span class="badge badge-absent">A</span>
+                        </div>
+                        <div class="participant-function">Contrôleur technique</div>
+                        <div class="participant-entity">Socotec</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">Mme LIGE</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">Coordinateur SPS</div>
+                        <div class="participant-entity">Socotec</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">WEEX</div>
+                            <span class="badge badge-excuse">E</span>
+                        </div>
+                        <div class="participant-function">Coordinateur SSI</div>
+                        <div class="participant-entity">WEEX</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">P. AMIRAULT</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">Conducteur de travaux</div>
+                        <div class="participant-entity">BESSIE</div>
+                    </div>
+
+                    <div class="participant-card">
+                        <div class="participant-header">
+                            <div class="participant-name">K. DIUF</div>
+                            <span class="badge badge-present">P</span>
+                        </div>
+                        <div class="participant-function">Conducteur de travaux</div>
+                        <div class="participant-entity">BATI PRO</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: ACTIONS -->
+            <div id="actions" class="tab-content">
+                <div class="section">
+                    <div class="section-title">✅ Actions à suivre</div>
+                    
+                    <div class="action-card">
+                        <span class="badge badge-urgent">URGENT</span>
+                        <div class="action-description">Vérification limites parcellaires – PV non signé famille BALTHAZAR</div>
+                        <div class="action-footer">
+                            <span>👤 MOU</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-urgent">URGENT</span>
+                        <div class="action-description">Rapport G3 GINGER</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Dispositif renouvellement d'air RDC (désenfumage mécanique). Prévoir enveloppe 15 000 €</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Bouclage du dossier de raccordement EDF</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Demandes devis concessionnaires : 4 lignes Orange / SGDE / EDF raccordement</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Demande autorisation raccordement eaux superficielles à la CACL</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 Relance</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Mise en place des 2 portails sur l'accès de chantier rue des Ibis</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-cours">EN COURS</span>
+                        <div class="action-description">Études VRD : faire apparaître arrivée SGDE et chambre télécom sur plan réseaux</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 Sem. 07</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-en-attente">EN ATTENTE</span>
+                        <div class="action-description">Constats avoisinants AZ 294 – Relancer l'huissier (SCP PIGREE FLORIMOND)</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <span class="badge badge-urgent">URGENT</span>
+                        <div class="action-description">Planning actualisé Ind 0BE 2025 – actualiser en urgence</div>
+                        <div class="action-footer">
+                            <span>👤 MOE</span>
+                            <span>📅 URGENT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: LOTS -->
+            <div id="lots" class="tab-content">
+                <div class="section">
+                    <div class="section-title">📊 Synthèse inter-entreprises</div>
+                    
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 1</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">VRD</div>
+                        <div class="lot-observation">Modification du réseau élec par rapport au TGBT</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 07</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 2</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">GO</div>
+                        <div class="lot-observation">Plans transmis par Bati Pro aux corps d'états. Réservations à prévoir dans les retombées de poutres</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 07-08</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 3</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">ELEC</div>
+                        <div class="lot-observation">Intégrer le plan d'aménagement du RDC de CAA. Passage des réseaux dans la dalle RDC et salle de réunion R+1</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 07</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 4</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">PLB</div>
+                        <div class="lot-observation">Intégration des passages de réseaux dans les retombées de poutres. Plan à transmettre</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 07</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 5</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">MA</div>
+                        <div class="lot-observation">Cahier des détails de menuiseries transmis. En attente de validation MOE (ABS) des plans GO</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 08</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 6</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">MB</div>
+                        <div class="lot-observation">Fiches techniques et plans EXE à demander (Bati/porte)</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 07</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 7</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">REVÊT.</div>
+                        <div class="lot-observation">Plan de calepinage à remettre</div>
+                        <div class="lot-footer">
+                            <span>📅 Sem. 09</span>
+                        </div>
+                    </div>
+
+                    <div class="lot-item">
+                        <div class="lot-header">
+                            <span class="lot-number">Lot 8</span>
+                            <span class="badge badge-en-attente">À faire</span>
+                        </div>
+                        <div class="lot-name">PEINTURE</div>
+                        <div class="lot-observation">Plan de calepinage à remettre par CAA (SCI MADELE)</div>
+                        <div class="lot-footer">
+                            <span>📅 À définir</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('accueil')">
+                <div class="nav-icon">📋</div>
+                <div>Accueil</div>
+            </button>
+            <button class="nav-item" onclick="switchTab('participants')">
+                <div class="nav-icon">👥</div>
+                <div>Participants</div>
+            </button>
+            <button class="nav-item" onclick="switchTab('actions')">
+                <div class="nav-icon">✅</div>
+                <div>Actions</div>
+            </button>
+            <button class="nav-item" onclick="switchTab('lots')">
+                <div class="nav-icon">📊</div>
+                <div>Lots</div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Add active class to corresponding nav item
+            const navItem = Array.from(navItems).find(item => 
+                item.textContent.toLowerCase().includes(tabName.toLowerCase())
+            );
+            if (navItem) navItem.classList.add('active');
+
+            // Scroll to top
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        // Service Worker pour PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(`
+                self.addEventListener('install', event => {
+                    event.waitUntil(caches.open('amo-v1').then(cache => {
+                        return cache.addAll(['/']);
+                    }));
+                });
+
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request).then(response => {
+                            return response || fetch(event.request);
+                        })
+                    );
+                });
+            `)).catch(() => {});
+        }
+    </script>
+</body>
+</html>
