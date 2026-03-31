@@ -6,432 +6,100 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="AMO Chantier">
-    <meta name="theme-color" content="#1E3A8A">
     <title>AMO Chantier - Gestion de Chantier</title>
-    
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231E3A8A' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'>AMO</text></svg>">
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22AMO%20Chantier%22,%22short_name%22:%22AMO%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%231E3A8A%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231E3A8A' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'>AMO</text></svg>%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]}">
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #F8FAFC;
-            color: #1E3A8A;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
-            color: white;
-            padding: 20px 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* MAIN CONTENT */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 70px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .section {
-            padding: 16px;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #1E3A8A;
-        }
-
-        /* CARDS */
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid #1E3A8A;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:active {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1E3A8A;
-        }
-
-        .card-text {
-            font-size: 14px;
-            color: #64748B;
-            margin-bottom: 6px;
-            line-height: 1.5;
-        }
-
-        /* BADGES */
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-            margin-right: 8px;
-        }
-
-        .badge-urgent {
-            background-color: #FF6B6B;
-            color: white;
-        }
-
-        .badge-en-cours {
-            background-color: #4ECDC4;
-            color: white;
-        }
-
-        .badge-en-attente {
-            background-color: #FFE66D;
-            color: #333;
-        }
-
-        .badge-realise {
-            background-color: #95E1D3;
-            color: #333;
-        }
-
-        .badge-present {
-            background-color: #51CF66;
-            color: white;
-        }
-
-        .badge-excuse {
-            background-color: #FFD93D;
-            color: #333;
-        }
-
-        .badge-absent {
-            background-color: #FF6B6B;
-            color: white;
-        }
-
-        .badge-represente {
-            background-color: #A8E6CF;
-            color: #333;
-        }
-
-        /* STATS */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1E3A8A;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #64748B;
-            margin-top: 4px;
-        }
-
-        /* TABS */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #E2E8F0;
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px 16px;
-            text-align: center;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            font-weight: 600;
-            font-size: 14px;
-            color: #64748B;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .tab.active {
-            color: #1E3A8A;
-            border-bottom-color: #1E3A8A;
-        }
-
-        /* TAB CONTENT */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* BOTTOM NAV */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top: 1px solid #E2E8F0;
-            display: flex;
-            justify-content: space-around;
-            padding-bottom: max(0px, env(safe-area-inset-bottom));
-            z-index: 200;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-        }
-
-        .nav-item {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            color: #CBD5E1;
-            transition: color 0.3s;
-            font-size: 12px;
-            border: none;
-            background: none;
-        }
-
-        .nav-item.active {
-            color: #1E3A8A;
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        /* PARTICIPANT LIST */
-        .participant-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .participant-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .participant-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1E3A8A;
-        }
-
-        .participant-function {
-            font-size: 14px;
-            color: #64748B;
-            margin-bottom: 4px;
-        }
-
-        .participant-entity {
-            font-size: 12px;
-            color: #94A3B8;
-        }
-
-        /* ACTION CARD */
-        .action-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .action-description {
-            font-size: 14px;
-            color: #1E3A8A;
-            font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-
-        .action-footer {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 8px;
-            border-top: 1px solid #E2E8F0;
-            font-size: 12px;
-            color: #64748B;
-        }
-
-        /* LOTS TABLE */
-        .lot-item {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .lot-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .lot-number {
-            font-size: 14px;
-            font-weight: 700;
-            color: #1E3A8A;
-            background: #E0E7FF;
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-
-        .lot-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1E3A8A;
-            margin-bottom: 4px;
-        }
-
-        .lot-observation {
-            font-size: 13px;
-            color: #64748B;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .lot-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: #94A3B8;
-        }
-
-        /* REFRESH BUTTON */
-        .refresh-btn {
-            position: fixed;
-            bottom: 90px;
-            right: 16px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: #1E3A8A;
-            color: white;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-            z-index: 150;
-        }
-
-        .refresh-btn:active {
-            transform: scale(0.95);
-        }
-
-        .refresh-btn.spinning {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            .stats-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* SAFE AREA */
-        @supports (padding: max(0px)) {
-            .header {
-                padding-top: max(20px, env(safe-area-inset-top));
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #F8FAFC; color: #1E3A8A; }
+        .container { max-width: 100%; height: 100vh; display: flex; flex-direction: column; }
+        .header { background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); color: white; padding: 20px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .content { flex: 1; overflow-y: auto; padding-bottom: 70px; -webkit-overflow-scrolling: touch; }
+        .section { padding: 16px; border-bottom: 1px solid #E2E8F0; }
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #1E3A8A; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #1E3A8A; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #1E3A8A; }
+        .card-text { font-size: 14px; color: #64748B; margin-bottom: 6px; line-height: 1.5; }
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 8px; margin-right: 8px; }
+        .badge-urgent { background-color: #FF6B6B; color: white; }
+        .badge-en-cours { background-color: #4ECDC4; color: white; }
+        .badge-en-attente { background-color: #FFE66D; color: #333; }
+        .badge-realise { background-color: #95E1D3; color: #333; }
+        .badge-present { background-color: #51CF66; color: white; }
+        .badge-excuse { background-color: #FFD93D; color: #333; }
+        .badge-absent { background-color: #FF6B6B; color: white; }
+        .badge-represente { background-color: #A8E6CF; color: #333; }
+        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .stat-card { background: white; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .stat-number { font-size: 28px; font-weight: 700; color: #1E3A8A; }
+        .stat-label { font-size: 12px; color: #64748B; margin-top: 4px; }
+        .tabs { display: flex; border-bottom: 1px solid #E2E8F0; background: white; position: sticky; top: 0; z-index: 50; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab { flex: 1; padding: 12px 16px; text-align: center; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600; font-size: 14px; color: #64748B; transition: all 0.3s; white-space: nowrap; border: none; background: none; }
+        .tab.active { color: #1E3A8A; border-bottom-color: #1E3A8A; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-around; z-index: 200; box-shadow: 0 -2px 8px rgba(0,0,0,0.08); }
+        .nav-item { flex: 1; padding: 12px; text-align: center; cursor: pointer; color: #CBD5E1; transition: color 0.3s; font-size: 12px; border: none; background: none; }
+        .nav-item.active { color: #1E3A8A; }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #1E3A8A; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; font-family: inherit; background: white; color: #1E3A8A; }
+        .form-textarea { resize: vertical; min-height: 80px; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #1E3A8A; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
+        .btn { padding: 12px 16px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; width: 100%; margin-bottom: 8px; }
+        .btn-primary { background-color: #1E3A8A; color: white; }
+        .btn-secondary { background-color: #E2E8F0; color: #1E3A8A; }
+        .btn-danger { background-color: #FF6B6B; color: white; }
+        .btn-small { padding: 8px 12px; font-size: 12px; width: auto; margin: 0 4px 0 0; display: inline-block; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 300; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .modal.active { display: flex; align-items: flex-end; }
+        .modal-content { background: white; width: 100%; border-radius: 16px 16px 0 0; padding: 20px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #1E3A8A; display: flex; justify-content: space-between; align-items: center; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #64748B; }
+        .participant-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .participant-name { font-size: 16px; font-weight: 600; color: #1E3A8A; margin-bottom: 4px; }
+        .participant-function { font-size: 14px; color: #64748B; margin-bottom: 4px; }
+        .participant-entity { font-size: 12px; color: #94A3B8; }
+        .action-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .action-description { font-size: 14px; color: #1E3A8A; font-weight: 600; margin-bottom: 12px; line-height: 1.5; }
+        .action-footer { display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid #E2E8F0; font-size: 12px; color: #64748B; }
+        .note-item { padding: 12px; background: #F8FAFC; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #1E3A8A; }
+        .note-date { font-size: 12px; color: #94A3B8; margin-bottom: 4px; }
+        .note-text { font-size: 14px; color: #1E3A8A; line-height: 1.5; }
+        .photos-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; }
+        .photo-item { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 1; background: #E2E8F0; }
+        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-delete { position: absolute; top: 8px; right: 8px; background: rgba(255, 107, 107, 0.9); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 18px; cursor: pointer; }
+        .photo-upload { border: 2px dashed #1E3A8A; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; }
+        .photo-upload input { display: none; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #94A3B8; }
+        .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+        .search-box { padding: 12px 16px; background: white; border-bottom: 1px solid #E2E8F0; position: sticky; top: 0; z-index: 40; }
+        .search-input { width: 100%; padding: 10px 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; }
+        .lot-item { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        .lot-name { font-size: 16px; font-weight: 600; color: #1E3A8A; margin-bottom: 4px; }
+        .lot-observation { font-size: 13px; color: #64748B; margin-bottom: 8px; line-height: 1.4; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
         <div class="header">
             <h1>🏗️ Gestion de Chantier</h1>
             <p>Fiche AMO - Visite du 20/03/2026</p>
         </div>
 
-        <!-- TABS -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('accueil')">📋 Accueil</button>
             <button class="tab" onclick="switchTab('participants')">👥 Participants</button>
             <button class="tab" onclick="switchTab('actions')">✅ Actions</button>
             <button class="tab" onclick="switchTab('lots')">📊 Lots</button>
+            <button class="tab" onclick="switchTab('notes')">📝 Notes</button>
+            <button class="tab" onclick="switchTab('photos')">📸 Photos</button>
         </div>
 
-        <!-- CONTENT -->
         <div class="content">
-            <!-- TAB: ACCUEIL -->
+            <!-- ACCUEIL -->
             <div id="accueil" class="tab-content active">
                 <div class="section">
                     <div class="section-title">📋 Opération</div>
@@ -448,328 +116,82 @@
                     <div class="section-title">📊 Aperçu</div>
                     <div class="stats-container">
                         <div class="stat-card">
-                            <div class="stat-number">04</div>
-                            <div class="stat-label">Fiche</div>
+                            <div class="stat-number" id="countParticipants">0</div>
+                            <div class="stat-label">Participants</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">10</div>
+                            <div class="stat-number" id="countActions">0</div>
                             <div class="stat-label">Actions</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number">8</div>
-                            <div class="stat-label">Lots</div>
+                            <div class="stat-number" id="countNotes">0</div>
+                            <div class="stat-label">Notes</div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">🏢 Intervenants</div>
-                    <div class="card">
-                        <div class="card-text"><strong>Maître d'Ouvrage :</strong> SCI MADELE</div>
-                        <div class="card-text"><strong>MOE :</strong> BAT & VRD ABS</div>
-                        <div class="card-text"><strong>AMO :</strong> MEO</div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">⚠️ Retards</div>
-                    <div class="card">
-                        <div class="card-text">🔴 <strong>Fondations</strong> : 6 semaines de retard</div>
-                        <div class="card-text">Achèvement contractuel : 30/01/2026</div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB: PARTICIPANTS -->
+            <!-- PARTICIPANTS -->
             <div id="participants" class="tab-content">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchParticipants" placeholder="🔍 Rechercher..." onkeyup="filterParticipants()">
+                </div>
                 <div class="section">
-                    <div class="section-title">👥 Participants à la visite</div>
-                    
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Romain LANNERETONNE</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">Maître d'ouvrage – MOU</div>
-                        <div class="participant-entity">SCI MADELE</div>
+                    <div class="section-title">
+                        👥 Participants
+                        <button class="btn btn-primary btn-small" onclick="openAddParticipantModal()">+ Ajouter</button>
                     </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Karim WEIMERT</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">Manager d'opération</div>
-                        <div class="participant-entity">MEO</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Gaétan BERNARD</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">MOE BAT & VRD</div>
-                        <div class="participant-entity">BAT & VRD ABS</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Samou TRAORE</div>
-                            <span class="badge badge-excuse">E</span>
-                        </div>
-                        <div class="participant-function">IET BET GO</div>
-                        <div class="participant-entity">BET GO</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Socotec – MAHES</div>
-                            <span class="badge badge-absent">A</span>
-                        </div>
-                        <div class="participant-function">Contrôleur technique</div>
-                        <div class="participant-entity">Socotec</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">Mme LIGE</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">Coordinateur SPS</div>
-                        <div class="participant-entity">Socotec</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">WEEX</div>
-                            <span class="badge badge-excuse">E</span>
-                        </div>
-                        <div class="participant-function">Coordinateur SSI</div>
-                        <div class="participant-entity">WEEX</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">P. AMIRAULT</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">Conducteur de travaux</div>
-                        <div class="participant-entity">BESSIE</div>
-                    </div>
-
-                    <div class="participant-card">
-                        <div class="participant-header">
-                            <div class="participant-name">K. DIUF</div>
-                            <span class="badge badge-present">P</span>
-                        </div>
-                        <div class="participant-function">Conducteur de travaux</div>
-                        <div class="participant-entity">BATI PRO</div>
-                    </div>
+                    <div id="participantsList"></div>
                 </div>
             </div>
 
-            <!-- TAB: ACTIONS -->
+            <!-- ACTIONS -->
             <div id="actions" class="tab-content">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchActions" placeholder="🔍 Rechercher..." onkeyup="filterActions()">
+                </div>
                 <div class="section">
-                    <div class="section-title">✅ Actions à suivre</div>
-                    
-                    <div class="action-card">
-                        <span class="badge badge-urgent">URGENT</span>
-                        <div class="action-description">Vérification limites parcellaires – PV non signé famille BALTHAZAR</div>
-                        <div class="action-footer">
-                            <span>👤 MOU</span>
-                            <span>📅 URGENT</span>
-                        </div>
+                    <div class="section-title">
+                        ✅ Actions à suivre
+                        <button class="btn btn-primary btn-small" onclick="openAddActionModal()">+ Ajouter</button>
                     </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-urgent">URGENT</span>
-                        <div class="action-description">Rapport G3 GINGER</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Dispositif renouvellement d'air RDC (désenfumage mécanique). Prévoir enveloppe 15 000 €</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Bouclage du dossier de raccordement EDF</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Demandes devis concessionnaires : 4 lignes Orange / SGDE / EDF raccordement</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Demande autorisation raccordement eaux superficielles à la CACL</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 Relance</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Mise en place des 2 portails sur l'accès de chantier rue des Ibis</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-cours">EN COURS</span>
-                        <div class="action-description">Études VRD : faire apparaître arrivée SGDE et chambre télécom sur plan réseaux</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 Sem. 07</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-en-attente">EN ATTENTE</span>
-                        <div class="action-description">Constats avoisinants AZ 294 – Relancer l'huissier (SCP PIGREE FLORIMOND)</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
-
-                    <div class="action-card">
-                        <span class="badge badge-urgent">URGENT</span>
-                        <div class="action-description">Planning actualisé Ind 0BE 2025 – actualiser en urgence</div>
-                        <div class="action-footer">
-                            <span>👤 MOE</span>
-                            <span>📅 URGENT</span>
-                        </div>
-                    </div>
+                    <div id="actionsList"></div>
                 </div>
             </div>
 
-            <!-- TAB: LOTS -->
+            <!-- LOTS -->
             <div id="lots" class="tab-content">
                 <div class="section">
                     <div class="section-title">📊 Synthèse inter-entreprises</div>
-                    
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 1</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">VRD</div>
-                        <div class="lot-observation">Modification du réseau élec par rapport au TGBT</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 07</span>
-                        </div>
-                    </div>
+                    <div id="lotsList"></div>
+                </div>
+            </div>
 
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 2</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">GO</div>
-                        <div class="lot-observation">Plans transmis par Bati Pro aux corps d'états. Réservations à prévoir dans les retombées de poutres</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 07-08</span>
-                        </div>
+            <!-- NOTES -->
+            <div id="notes" class="tab-content">
+                <div class="section">
+                    <div class="section-title">
+                        📝 Notes
+                        <button class="btn btn-primary btn-small" onclick="openAddNoteModal()">+ Ajouter</button>
                     </div>
+                    <div id="notesList"></div>
+                </div>
+            </div>
 
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 3</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">ELEC</div>
-                        <div class="lot-observation">Intégrer le plan d'aménagement du RDC de CAA. Passage des réseaux dans la dalle RDC et salle de réunion R+1</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 07</span>
-                        </div>
-                    </div>
-
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 4</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">PLB</div>
-                        <div class="lot-observation">Intégration des passages de réseaux dans les retombées de poutres. Plan à transmettre</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 07</span>
-                        </div>
-                    </div>
-
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 5</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">MA</div>
-                        <div class="lot-observation">Cahier des détails de menuiseries transmis. En attente de validation MOE (ABS) des plans GO</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 08</span>
-                        </div>
-                    </div>
-
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 6</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">MB</div>
-                        <div class="lot-observation">Fiches techniques et plans EXE à demander (Bati/porte)</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 07</span>
-                        </div>
-                    </div>
-
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 7</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">REVÊT.</div>
-                        <div class="lot-observation">Plan de calepinage à remettre</div>
-                        <div class="lot-footer">
-                            <span>📅 Sem. 09</span>
-                        </div>
-                    </div>
-
-                    <div class="lot-item">
-                        <div class="lot-header">
-                            <span class="lot-number">Lot 8</span>
-                            <span class="badge badge-en-attente">À faire</span>
-                        </div>
-                        <div class="lot-name">PEINTURE</div>
-                        <div class="lot-observation">Plan de calepinage à remettre par CAA (SCI MADELE)</div>
-                        <div class="lot-footer">
-                            <span>📅 À définir</span>
-                        </div>
+            <!-- PHOTOS -->
+            <div id="photos" class="tab-content">
+                <div class="section">
+                    <div class="section-title">📸 Photos du chantier</div>
+                    <div class="photos-container" id="photosList"></div>
+                    <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📷</div>
+                        <div>Ajouter une photo</div>
+                        <input type="file" id="photoInput" accept="image/*" onchange="addPhoto(event)">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="switchTab('accueil')">
                 <div class="nav-icon">📋</div>
@@ -787,57 +209,397 @@
                 <div class="nav-icon">📊</div>
                 <div>Lots</div>
             </button>
+            <button class="nav-item" onclick="switchTab('notes')">
+                <div class="nav-icon">📝</div>
+                <div>Notes</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="addParticipantModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Ajouter un participant</span>
+                <button class="modal-close" onclick="closeModal('addParticipantModal')">✕</button>
+            </div>
+            <form onsubmit="saveParticipant(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-input" id="participantName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fonction</label>
+                    <input type="text" class="form-input" id="participantFunction" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entité</label>
+                    <input type="text" class="form-input" id="participantEntity" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Présence</label>
+                    <select class="form-select" id="participantPresence" required>
+                        <option value="P">Présent (P)</option>
+                        <option value="E">Excusé (E)</option>
+                        <option value="A">Absent (A)</option>
+                        <option value="R">Représenté (R)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addParticipantModal')">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addActionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Ajouter une action</span>
+                <button class="modal-close" onclick="closeModal('addActionModal')">✕</button>
+            </div>
+            <form onsubmit="saveAction(event)">
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="actionDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Responsable</label>
+                    <input type="text" class="form-input" id="actionResponsible" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Échéance</label>
+                    <input type="text" class="form-input" id="actionDeadline" placeholder="ex: Sem. 07" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    <select class="form-select" id="actionStatus" required>
+                        <option value="urgent">URGENT</option>
+                        <option value="en_cours">EN COURS</option>
+                        <option value="en_attente">EN ATTENTE</option>
+                        <option value="realise">RÉALISÉ</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addActionModal')">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addNoteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Ajouter une note</span>
+                <button class="modal-close" onclick="closeModal('addNoteModal')">✕</button>
+            </div>
+            <form onsubmit="saveNote(event)">
+                <div class="form-group">
+                    <label class="form-label">Note</label>
+                    <textarea class="form-textarea" id="noteText" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addNoteModal')">Annuler</button>
+            </form>
         </div>
     </div>
 
     <script>
+        const defaultData = {
+            participants: [
+                { id: 1, nom: 'Romain LANNERETONNE', fonction: 'Maître d\'ouvrage – MOU', entite: 'SCI MADELE', presence: 'P' },
+                { id: 2, nom: 'Karim WEIMERT', fonction: 'Manager d\'opération', entite: 'MEO', presence: 'P' },
+                { id: 3, nom: 'Gaétan BERNARD', fonction: 'MOE BAT & VRD', entite: 'BAT & VRD ABS', presence: 'P' },
+                { id: 4, nom: 'Samou TRAORE', fonction: 'IET BET GO', entite: 'BET GO', presence: 'E' },
+                { id: 5, nom: 'Socotec – MAHES', fonction: 'Contrôleur technique', entite: 'Socotec', presence: 'A' },
+                { id: 6, nom: 'Mme LIGE', fonction: 'Coordinateur SPS', entite: 'Socotec', presence: 'P' },
+                { id: 7, nom: 'WEEX', fonction: 'Coordinateur SSI', entite: 'WEEX', presence: 'E' },
+                { id: 8, nom: 'P. AMIRAULT', fonction: 'Conducteur de travaux', entite: 'BESSIE', presence: 'P' },
+                { id: 9, nom: 'K. DIUF', fonction: 'Conducteur de travaux', entite: 'BATI PRO', presence: 'P' }
+            ],
+            actions: [
+                { id: 1, description: 'Vérification limites parcellaires', responsable: 'MOU', echeance: 'URGENT', statut: 'urgent' },
+                { id: 2, description: 'Rapport G3 GINGER', responsable: 'MOE', echeance: 'URGENT', statut: 'urgent' },
+                { id: 3, description: 'Dispositif renouvellement d\'air RDC', responsable: 'MOE', echeance: 'URGENT', statut: 'en_cours' }
+            ],
+            lots: [
+                { id: 1, numero: 1, nom: 'VRD', observation: 'Modification du réseau élec', echeance: 'Sem. 07' },
+                { id: 2, numero: 2, nom: 'GO', observation: 'Plans transmis par Bati Pro', echeance: 'Sem. 07-08' },
+                { id: 3, numero: 3, nom: 'ELEC', observation: 'Intégrer le plan d\'aménagement', echeance: 'Sem. 07' }
+            ],
+            notes: [],
+            photos: []
+        };
+
+        let appData = JSON.parse(localStorage.getItem('amoChantierData')) || defaultData;
+
+        function saveData() {
+            localStorage.setItem('amoChantierData', JSON.stringify(appData));
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('countParticipants').textContent = appData.participants.length;
+            document.getElementById('countActions').textContent = appData.actions.length;
+            document.getElementById('countNotes').textContent = appData.notes.length;
+        }
+
         function switchTab(tabName) {
-            // Hide all tab contents
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
-
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            // Remove active class from all nav items
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => item.classList.remove('active'));
-
-            // Show selected tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-
-            // Add active class to clicked tab
-            event.target.classList.add('active');
-
-            // Add active class to corresponding nav item
-            const navItem = Array.from(navItems).find(item => 
-                item.textContent.toLowerCase().includes(tabName.toLowerCase())
-            );
-            if (navItem) navItem.classList.add('active');
-
-            // Scroll to top
+            document.querySelector(`.tab:nth-child(${getTabIndex(tabName) + 1})`).classList.add('active');
+            document.querySelector(`.nav-item:nth-child(${getTabIndex(tabName) + 1})`).classList.add('active');
             document.querySelector('.content').scrollTop = 0;
         }
 
-        // Service Worker pour PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(`
-                self.addEventListener('install', event => {
-                    event.waitUntil(caches.open('amo-v1').then(cache => {
-                        return cache.addAll(['/']);
-                    }));
-                });
-
-                self.addEventListener('fetch', event => {
-                    event.respondWith(
-                        caches.match(event.request).then(response => {
-                            return response || fetch(event.request);
-                        })
-                    );
-                });
-            `)).catch(() => {});
+        function getTabIndex(tabName) {
+            const tabs = ['accueil', 'participants', 'actions', 'lots', 'notes', 'photos'];
+            return tabs.indexOf(tabName);
         }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function renderParticipants() {
+            const list = document.getElementById('participantsList');
+            if (appData.participants.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div>Aucun participant</div></div>';
+                return;
+            }
+            list.innerHTML = appData.participants.map(p => `
+                <div class="participant-card">
+                    <div>
+                        <div class="participant-name">${p.nom}</div>
+                        <div class="participant-function">${p.fonction}</div>
+                        <div class="participant-entity">${p.entite}</div>
+                        <span class="badge badge-${getPresenceBadge(p.presence)}">${p.presence}</span>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deleteParticipant(${p.id})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function getPresenceBadge(p) {
+            const map = { 'P': 'present', 'E': 'excuse', 'A': 'absent', 'R': 'represente' };
+            return map[p] || 'present';
+        }
+
+        function filterParticipants() {
+            const search = document.getElementById('searchParticipants').value.toLowerCase();
+            const list = document.getElementById('participantsList');
+            const filtered = appData.participants.filter(p => 
+                p.nom.toLowerCase().includes(search) || p.fonction.toLowerCase().includes(search)
+            );
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><div>Aucun résultat</div></div>';
+                return;
+            }
+            list.innerHTML = filtered.map(p => `
+                <div class="participant-card">
+                    <div>
+                        <div class="participant-name">${p.nom}</div>
+                        <div class="participant-function">${p.fonction}</div>
+                        <div class="participant-entity">${p.entite}</div>
+                        <span class="badge badge-${getPresenceBadge(p.presence)}">${p.presence}</span>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="deleteParticipant(${p.id})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function openAddParticipantModal() {
+            document.getElementById('participantName').value = '';
+            document.getElementById('participantFunction').value = '';
+            document.getElementById('participantEntity').value = '';
+            document.getElementById('participantPresence').value = 'P';
+            openModal('addParticipantModal');
+        }
+
+        function saveParticipant(e) {
+            e.preventDefault();
+            appData.participants.push({
+                id: Date.now(),
+                nom: document.getElementById('participantName').value,
+                fonction: document.getElementById('participantFunction').value,
+                entite: document.getElementById('participantEntity').value,
+                presence: document.getElementById('participantPresence').value
+            });
+            saveData();
+            renderParticipants();
+            closeModal('addParticipantModal');
+        }
+
+        function deleteParticipant(id) {
+            if (confirm('Supprimer ce participant ?')) {
+                appData.participants = appData.participants.filter(p => p.id !== id);
+                saveData();
+                renderParticipants();
+            }
+        }
+
+        function renderActions() {
+            const list = document.getElementById('actionsList');
+            if (appData.actions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✅</div><div>Aucune action</div></div>';
+                return;
+            }
+            list.innerHTML = appData.actions.map(a => `
+                <div class="action-card">
+                    <span class="badge badge-${a.statut}">${a.statut.toUpperCase()}</span>
+                    <div class="action-description">${a.description}</div>
+                    <div class="action-footer">
+                        <span>👤 ${a.responsable}</span>
+                        <span>📅 ${a.echeance}</span>
+                        <button class="btn btn-danger btn-small" onclick="deleteAction(${a.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterActions() {
+            const search = document.getElementById('searchActions').value.toLowerCase();
+            const list = document.getElementById('actionsList');
+            const filtered = appData.actions.filter(a => a.description.toLowerCase().includes(search));
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✅</div><div>Aucun résultat</div></div>';
+                return;
+            }
+            list.innerHTML = filtered.map(a => `
+                <div class="action-card">
+                    <span class="badge badge-${a.statut}">${a.statut.toUpperCase()}</span>
+                    <div class="action-description">${a.description}</div>
+                    <div class="action-footer">
+                        <span>👤 ${a.responsable}</span>
+                        <span>📅 ${a.echeance}</span>
+                        <button class="btn btn-danger btn-small" onclick="deleteAction(${a.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openAddActionModal() {
+            document.getElementById('actionDescription').value = '';
+            document.getElementById('actionResponsible').value = '';
+            document.getElementById('actionDeadline').value = '';
+            document.getElementById('actionStatus').value = 'urgent';
+            openModal('addActionModal');
+        }
+
+        function saveAction(e) {
+            e.preventDefault();
+            appData.actions.push({
+                id: Date.now(),
+                description: document.getElementById('actionDescription').value,
+                responsable: document.getElementById('actionResponsible').value,
+                echeance: document.getElementById('actionDeadline').value,
+                statut: document.getElementById('actionStatus').value
+            });
+            saveData();
+            renderActions();
+            closeModal('addActionModal');
+        }
+
+        function deleteAction(id) {
+            if (confirm('Supprimer cette action ?')) {
+                appData.actions = appData.actions.filter(a => a.id !== id);
+                saveData();
+                renderActions();
+            }
+        }
+
+        function renderLots() {
+            const list = document.getElementById('lotsList');
+            list.innerHTML = appData.lots.map(l => `
+                <div class="lot-item">
+                    <div class="lot-name">Lot ${l.numero} - ${l.nom}</div>
+                    <div class="lot-observation">${l.observation}</div>
+                    <div style="font-size: 12px; color: #94A3B8;">📅 ${l.echeance}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderNotes() {
+            const list = document.getElementById('notesList');
+            if (appData.notes.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><div>Aucune note</div></div>';
+                return;
+            }
+            list.innerHTML = appData.notes.map(n => `
+                <div class="note-item">
+                    <div class="note-date">${new Date(n.date).toLocaleDateString('fr-FR')}</div>
+                    <div class="note-text">${n.text}</div>
+                    <button class="btn btn-danger btn-small" style="margin-top: 8px;" onclick="deleteNote(${n.id})">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function openAddNoteModal() {
+            document.getElementById('noteText').value = '';
+            openModal('addNoteModal');
+        }
+
+        function saveNote(e) {
+            e.preventDefault();
+            appData.notes.push({
+                id: Date.now(),
+                text: document.getElementById('noteText').value,
+                date: new Date().toISOString()
+            });
+            saveData();
+            renderNotes();
+            closeModal('addNoteModal');
+        }
+
+        function deleteNote(id) {
+            if (confirm('Supprimer cette note ?')) {
+                appData.notes = appData.notes.filter(n => n.id !== id);
+                saveData();
+                renderNotes();
+            }
+        }
+
+        function renderPhotos() {
+            const list = document.getElementById('photosList');
+            if (appData.photos.length === 0) return;
+            list.innerHTML = appData.photos.map(p => `
+                <div class="photo-item">
+                    <img src="${p.data}" alt="Photo">
+                    <button class="photo-delete" onclick="deletePhoto(${p.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function addPhoto(e) {
+            const file = e.target.files;
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                appData.photos.push({
+                    id: Date.now(),
+                    data: event.target.result
+                });
+                saveData();
+                renderPhotos();
+                document.getElementById('photoInput').value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deletePhoto(id) {
+            if (confirm('Supprimer cette photo ?')) {
+                appData.photos = appData.photos.filter(p => p.id !== id);
+                saveData();
+                renderPhotos();
+            }
+        }
+
+        // INITIALISATION
+        updateStats();
+        renderParticipants();
+        renderActions();
+        renderLots();
+        renderNotes();
+        renderPhotos();
     </script>
 </body>
 </html>
